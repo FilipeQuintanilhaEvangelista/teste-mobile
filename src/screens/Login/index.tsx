@@ -24,17 +24,17 @@ function Login({ navigation }) {
     saveLoginData();
   }, [rememberPassword]);
 
-  const verifyLogin = async () =>{
+  const verifyLogin = async () => {
     try {
       const usuarioLogado = await AsyncStorage.getItem("userLogged");
       console.log(usuarioLogado);
       if (usuarioLogado !== null || usuarioLogado !== undefined) {
-        navigation.navigate("Home")
+        navigation.navigate("Home");
       }
     } catch (error) {
       console.error("Erro ao carregar o login salvo:", error);
     }
-  }
+  };
 
   const saveLoginData = async () => {
     try {
@@ -69,7 +69,7 @@ function Login({ navigation }) {
     if (login !== "" && password !== "") {
       try {
         const response = await postLogin(login.trim(), password);
-       
+
         try {
           await AsyncStorage.setItem("token", response.data.token);
         } catch (error) {
@@ -77,6 +77,7 @@ function Login({ navigation }) {
         }
       } catch (error) {
         console.log(error);
+        alert("Credenciais incorretas");
       } finally {
         try {
           const accessToken = await AsyncStorage.getItem("token");
@@ -88,20 +89,22 @@ function Login({ navigation }) {
             };
 
             try {
-              const response = await getUsers(config)
+              const response = await getUsers(config);
               const userLogged = response.data.find(
                 (user) => user.username === login.trim()
               );
               try {
-                await AsyncStorage.setItem("userLogged", JSON.stringify(userLogged));
+                await AsyncStorage.setItem(
+                  "userLogged",
+                  JSON.stringify(userLogged)
+                );
               } catch (error) {
                 console.log(error);
               }
 
-              navigation.navigate("Home")
-
+              navigation.navigate("Home");
             } catch (error) {
-              console.log(error)
+              console.log(error);
             }
           }
         } catch (error) {
@@ -159,7 +162,9 @@ function Login({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
-          <Text style={{ color: "white" , textTransform: "uppercase"}}>Entrar</Text>
+          <Text style={{ color: "white", textTransform: "uppercase" }}>
+            Entrar
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
